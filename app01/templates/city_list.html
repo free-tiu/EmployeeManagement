@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        {# 按钮区域 #}
+        <div style="margin-bottom: 20px;">
+            {# target="_blank" —— 在新的标签页打开 #}
+            <a class="btn btn-success" href="/city/add/" >
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                添加城市
+            </a>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                城市列表
+                <span style="float: right;">共 {{ depart_list }} 个城市</span>
+            </div>
+            <!-- 表格 -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>城市名称</th>
+                        <th>城市人口</th>
+                        <th>城市LOGO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in queryset %}
+                    <tr>
+                        <th >{{ i.id }}</th>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.count }}</td>
+                        <td>
+                            <img src="/media/{{ i.img }}" style="width: 80px;height: 80px;">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# 分页区域 #}
+        <div>
+            <ul class="pagination" id="position">
+                {{ pageNums }}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

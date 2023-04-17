@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> 新建部门 </h3>
+            </div>
+            <div class="panel-body">
+                <form class="col-md-6 col-md-offset-3" method="post" action="/depart/add/">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label>标 题</label>
+                        <input type="text" name="title" class="form-control" placeholder="标题" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">提  交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

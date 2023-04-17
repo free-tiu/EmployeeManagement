@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>部门列表</title>
+        <link href="{% static 'other/bootstrap-3.4.1/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+        {% block css %}{% endblock %}
+
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'other/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+
+        {% block js %}{% endblock %}
+    </head>
+    <body>
+        {# 导航栏 #}
+        <nav class="navbar navbar-default">
+            <div class="container">
+                {# 导航栏标题 #}
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/depart/list/">XX用户管理系统</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    {# 导航栏内容 #}
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">功能管理 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/admin/list/">管理员账户</a></li>
+                                <li><a href="/depart/list/">部门管理</a></li>
+                                <li><a href="/user/list/">用户管理</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/order/list/">订单管理</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="/chart/default/">数据统计</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">文件管理 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/file/list/">普通上传</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/city/list/">城市列表</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/file/form/">Form上传</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">功能测试 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/num/list/">靓号管理</a></li>
+                                <li><a href="/task/list/">任务管理</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    {# 导航栏右侧登录状态 #}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            {# 获取request.session中的已登录的用户名 #}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="font-weight: bold;">{{ request.session.info.name }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">个人资料</a></li>
+                                <li><a href="#">我的消息</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/logout/">注销</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {# body #}
+        <div>
+            {% block content %}
+                {# 给子页面继承 #}
+            {% endblock %}
+        </div>
+
+        {% block script %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <h3>数据统计</h3>
+
+        <!-- 面板1 -->
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">折线图</h3>
+            </div>
+            <div class="panel-body">
+                <div id="m1" style="width: 100%;height:300px;"></div>
+            </div>
+        </div><br /><br />
+
+        <div class="row">
+            <!-- 面板2 -->
+            <div class="col-sm-7">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">柱状图</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="m2" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+             <!-- 面板3 -->
+            <div class="col-sm-5">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">饼图</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="m3" style="width: 100%;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'js/echarts.js' %}"></script>
+    <script type="text/javascript">
+        // 定义方法
+        $(function () {
+            initLine();
+            initBar();
+            initPie();
+        })
+
+        /**
+         * 初始化折线图
+         */
+        function initLine() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart1 = echarts.init(document.getElementById('m1'));
+            // 指定图表的配置项和数据
+            var option1 = {
+                title: {
+                text: '业绩图'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data: [],   // 后台获取
+                bottom: 0   // 角标说明放在底部
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: []   // 后台获取
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: []   // 后台获取
+            };
+
+            // 发送Ajax请求
+            $.ajax({
+                url: "/chart/line/",
+                type: "get",
+                datatype: "JSON",
+                success:function (res) {
+                    console.log(res)
+                    // 将后台返回的数据更新的到option中
+                    if (res.status){
+                        // 将获取到的数据填充到对应的项中
+                        option1.legend.data = res.data.legend_data;
+                        option1.xAxis[0].data = res.data.x_axis;
+                        option1.series = res.data.series_list;
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart1.setOption(option1);
+                    }
+                }
+            })
+        }
+
+        /**
+         * 初始化柱状图
+         */
+        function initBar() {
+            // 基于准备好的dom，初始化echarts实例，找到id为m2所在的div标签所在
+            var myChart2 = echarts.init(document.getElementById('m2'));
+            // 指定图表的配置项和数据
+            var option2 = {
+                title: {
+                    text: 'ECharts 入门示例'
+                },
+                tooltip: {},
+                legend: {       // 图例组件 (后台获取)
+                    data: [],
+                    bottom: 0
+                },
+                xAxis: {    // x轴 (后台获取)
+                    data: []
+                },
+                yAxis: {},
+                series: []      //  (后台获取)
+            };
+
+            // 发送Ajax请求
+            $.ajax({
+                url: "/chart/bar/",
+                type: "get",
+                datatype: "JSON",
+                success:function (res) {
+                    // console.log(res)
+                    // 将后台返回的数据更新的到option中
+                    if (res.status){
+                        // 将获取到的数据填充到对应的项中
+                        option2.legend.data = res.data.legend;
+                        option2.xAxis.data = res.data.x_axis;
+                        option2.series = res.data.series_list;
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart2.setOption(option2);
+                    }
+
+                }
+            })
+        }
+
+        /**
+         * 初始化饼图
+         */
+        function initPie() {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart3 = echarts.init(document.getElementById('m3'));
+
+            // 指定图表的配置项和数据
+            var option3 = {
+                title: {
+                    text: '部门预算占比',
+                    subtext: '',    // 副标题文本
+                    textAlign: 'left'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c}({d}%)'
+                },
+                legend: {
+                    padding: 5,      // 内边距
+                    itemGap: 5,  //颜色说明图例间隔。横向时为水平间隔，纵向时为纵向间隔
+                    bottom: 0
+                },
+                series: [{
+                    name: '预算',
+                    type: 'pie',
+                    radius: '50%',
+                    center: ['50%', '50%'],     // 全局默认居中
+                    data: [], // 后台获取
+                    // 高亮样式
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+            // 发送Ajax请求
+            $.ajax({
+                url: "/chart/pie/",
+                type: "get",
+                datatype: "JSON",
+                success:function (res) {
+                    //console.log(res)
+                    // 将后台返回的数据更新的到option中
+                    if (res.status){
+                        // 将获取到的数据填充到对应的项中
+                        option3.series[0].data = res.data;
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart3.setOption(option3);
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}
+
+
+

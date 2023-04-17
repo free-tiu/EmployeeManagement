@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        {# 按钮区域 #}
+        <div style="margin-bottom: 20px;">
+            {# target="_blank" —— 在新的标签页打开 #}
+            <a class="btn btn-success" href="/admin/add/" >
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                添加管理员
+            </a>
+        </div>
+
+        {# 表格区域 #}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                管理员列表
+                <span style="float: right;">共 {{ depart_list }} 位管理员</span>
+            </div>
+            <!-- 表格 -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>密码</th>
+                        <th>操作</th>
+                        <th>重置密码</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in queryset %}
+                    <tr>
+                        <th >{{ i.id }}</th>
+                        <td>{{ i.username }}</td>
+                        <td>***********</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/admin/{{ i.id }}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/admin/{{ i.id }}/delete/">删除</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger btn-xs" href="/admin/{{ i.id }}/reset/"> 重置密码</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# 分页区域 #}
+        <div>
+            <ul class="pagination" id="position">
+                {{ pageNums }}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

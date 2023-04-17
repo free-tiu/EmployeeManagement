@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{# 引入CSS #}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/other/bootstrap-datepicker/css/bootstrap-datetimepicker.css' %}">
+{% endblock %}
+
+{# 引入JS #}
+{% block js %}
+    <script src="{% static 'other/bootstrap-datepicker/js/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'other/bootstrap-datepicker/locales/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+
+    <script>
+        $(function () {
+            {# 根据 #dt 找到对应的标签 #}
+            $('#dt').datetimepicker({
+                format: 'yyyy-mm-dd',
+                startDate: '0',
+                language: 'zh-CN',
+                autoclose: true
+            });
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> 新建用户 </h3>
+            </div>
+            <div class="panel-body">
+                <form class="col-md-6 col-md-offset-3" method="post" action="/user/add/">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label>姓 名</label>
+                        <input type="text" name="user" class="form-control" placeholder="姓 名"/><br />
+
+                        <label>年 龄</label>
+                        <input type="text" name="age" class="form-control" placeholder="年 龄" /><br />
+
+                        <label>性 别</label>
+                        <select class="form-control" name="sex">
+                            {% for g in gender_choices %}
+                                <option value="{{ g.0 }}">{{ g.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        <br />
+
+                        <label>所属部门</label>
+                        <select class="form-control" name="dp">
+                            {% for i in depart_data %}
+                                <option value="{{ i.id }}">{{ i.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <br />
+
+                        <label>账户余额</label>
+                        <input type="text" name="ac" class="form-control" placeholder="账户余额" /><br />
+
+                        <label>密 码</label>
+                        <input type="text" name="pwd" class="form-control" placeholder="密 码" /><br />
+
+                        <label>入职时间</label>
+                        <input id="dt" type="text" name="ctime" class="form-control" placeholder="入职时间" /><br />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">提  交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{# 引入CSS #}
+{% block css %}
+    <link rel="stylesheet" href="{% static '/other/bootstrap-datepicker/css/bootstrap-datetimepicker.css' %}">
+{% endblock %}
+
+{# 引入JS #}
+{% block js %}
+    <script src="{% static 'other/bootstrap-datepicker/js/bootstrap-datetimepicker.js' %}"></script>
+    <script src="{% static 'other/bootstrap-datepicker/locales/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+
+    <script>
+        $(function () {
+            {# 根据 #dt 找到对应的标签 #}
+            $('#id_create_time').datetimepicker({
+                format: 'yyyy-mm-dd',
+                startDate: '0',
+                language: 'zh-CN',
+                autoclose: true
+            });
+        })
+    </script>
+{% endblock %}
+
+{# body部分 #}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> 新建用户 </h3>
+            </div>
+            <div class="panel-body">
+                <form class="col-md-6 col-md-offset-3" method="post" action="/user/add_model/" novalidate>
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        {# 获取对应字段的中文名 #}
+                        <label>{{ field.label }}： </label>
+                        {{ field }}
+                        <span style="color: red;">{{ field.errors.0 }}</span>
+                        <br /><br />
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary">提  交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

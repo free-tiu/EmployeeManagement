@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        {# 按钮区域 #}
+        <div style="margin-bottom: 20px;">
+            {# target="_blank" —— 在新的标签页打开 #}
+            <a class="btn btn-success" href="/depart/add/" >
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建部门
+            </a>
+        </div>
+
+        {# 表格区域 #}
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">批量上传添加部门</h3>
+            </div>
+            <div class="panel-body">
+                <!-- enctype="multipart/form-data" => 支持上传文件内容 -->
+                <form method="post" enctype="multipart/form-data" action="/depart/upload/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" name="exc">
+                    </div>
+
+                    <input type="submit" class="btn-success btn-xs" value="上传">
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                部门列表
+                <span style="float: right;">共 {{ depart_list }} 个部门</span>
+            </div>
+            <!-- 表格 -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>部门名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in page_queryset %}
+                    <tr>
+                        <th >{{ i.id }}</th>
+                        <td>{{ i.title }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href="/depart/{{ i.id }}/edit/">编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/depart/delete/?nid={{ i.id }}">删除</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# 分页区域 #}
+        <div>
+            <ul class="pagination" id="position">
+                {{ pageNums }}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
