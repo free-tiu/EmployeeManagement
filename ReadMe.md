@@ -1,4 +1,11 @@
+# EmployeeManagement项目
+
+> 技术：Python，Django，MySQL，Ajax，Bootstrap，Echart等
+
+- 初阶项目，前后端不分离
+
 # XX管理系统
+
 > - 项目基于Django，数据库使用MySQL
 > - 初级练手项目
 > - 对于有重复的代码没有进行优化，只实现相关功能
